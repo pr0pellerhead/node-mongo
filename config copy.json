@@ -1,0 +1,12 @@
+{
+    "db": {
+        "host": "",
+        "dbname": "",
+        "username": "",
+        "password": ""
+    },
+    "mailer": {
+        "server": "",
+        "api_key": ""
+    }
+}

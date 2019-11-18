@@ -1,10 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const config = require('./config/index.js');
 const DBConn = require('./db/connection');
 const filmovi = require('./handlers/filmovi');
 
-DBConn.init();
+var c = config.getConfig("db");
+
+DBConn.init(c);
 const api = express();
 api.use(bodyParser.json());
 
