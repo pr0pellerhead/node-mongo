@@ -1,9 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const config = require('./config/index.js');
-const DBConn = require('./db/connection');
-const filmovi = require('./handlers/filmovi');
+const config = require('../config/index.js');
+const DBConn = require('../db/connection');
+const filmovi = require('../handlers/filmovi');
 
 var c = config.getConfig("db");
 
