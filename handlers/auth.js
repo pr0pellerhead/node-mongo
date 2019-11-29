@@ -45,9 +45,9 @@ const login = (req, res) => {
             }
             if(rez){
                 var tokenData = {
-                    id: rez._id,
-                    full_name: `${rez.first_name} ${rez.last_name}`,
-                    email: rez.email
+                    id: data._id,
+                    full_name: `${data.first_name} ${data.last_name}`,
+                    email: data.email
                 };
                 var token = jwt.sign(tokenData, config.getConfig('jwt').key);
                 return res.status(200).send({jwt: token});
@@ -62,7 +62,7 @@ const login = (req, res) => {
 };
 
 const renew = (req, res) => {
-    return res.status(200).send('ok');
+    return res.status(200).send(req.user.id);
 }
 
 const resetLink = (req, res) => {

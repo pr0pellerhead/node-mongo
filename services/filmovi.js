@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+var jwt = require('express-jwt');
 const config = require('../config/index.js');
 const DBConn = require('../db/connection');
 const filmovi = require('../handlers/filmovi');
@@ -10,6 +10,11 @@ var c = config.getConfig("db");
 DBConn.init(c);
 const api = express();
 api.use(bodyParser.json());
+api.use(
+    jwt(
+        {secret: config.getConfig('jwt').key}
+    )
+);
 
 api.get('/api/v1/filmovi', filmovi.getAll);
 api.get('/api/v1/filmovi/:id', filmovi.getOne);

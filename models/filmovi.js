@@ -8,16 +8,17 @@ const Film = mongoose.model(
         zanr: [String],
         rezija: String,
         oscar: Boolean,
-        akteri: [String]
+        akteri: [String],
+        user_id: String
     }, 
     {
         collection: 'filmovi'
     })
 );
 
-const getAll = () => {
+const getAll = (userID) => {
     return new Promise((success, fail) => {
-        Film.find({}, (err, data) => {
+        Film.find({user_id: userID}, (err, data) => {
             if(err){
                 return fail(err);
             }
@@ -26,13 +27,13 @@ const getAll = () => {
     });
 };
 
-const getOne = (id) => {
+const getOne = (id, userID) => {
     return new Promise((success, fail) => {
-        Film.findById(id, (err, data) => {
+        Film.find({_id: id, user_id: userID}, (err, data) => {
             if(err){
                 return fail(err);
             }
-            return success(data);
+            return success(data[0]);
         });
     });
 };
