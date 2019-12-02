@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" value="pero@pero.com" id="email" placeholder="email">
+    <br/>
+    <input type="password" value="pero123321" id="password" placeholder="password">
+    <br/>
+    <button id="btn-login">Log in</button>
+    <script>
+        var email = document.querySelector('#email');
+        var password = document.querySelector('#password');
+        var btnLogin = document.querySelector('#btn-login');
+
+        btnLogin.addEventListener('click', () => {
+            var data = {
+                email: email.value,
+                password: password.value,
+            };
+            
+            fetch(
+                '/api/v1/login', 
+                {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }
+            )
+            .then(res => res.json())
+            .then(d => {
+                // console.log(d.jwt);
+                localStorage.setItem('jwt', d.jwt);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        }); 
+    </script>
+    <hr/>
+    <button id="btn-renew">Renew token</button>
+    <script>
+        var btnRenew = document.querySelector('#btn-renew');
+
+        btnRenew.addEventListener('click', () => {
+            fetch(
+                '/api/v1/renew',
+                {
+                    method: 'get',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+                    }
+                }
+            )
+            .then(res => res.json())
+            .then(d => {
+                console.log(d);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        });
+    </script>
+</body>
+</html>
