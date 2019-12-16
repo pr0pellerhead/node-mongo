@@ -77,11 +77,23 @@ const changePassword = (req, res) => {
     return res.status(200).send('ok');
 }
 
+const confirm = (req, res) => {
+    // koga nekoj kje klikne na 
+    // http://localhost:8080/auth/v1/confirm/[CONFIRM_HASH]
+    // go nosi na ovoj handler
+    // go prezemate hash-ot
+    // proveruvate vo baza dali vakov hash postoi
+    // ako postoi na istiot record mu setirate
+    // confirmed: true
+    return res.status(200).send('ok');
+}
+
 module.exports = {
     register,
     login,
     renew,
     resetLink,
     resetPassword,
-    changePassword
+    changePassword,
+    confirm
 }

@@ -1,4 +1,6 @@
 const randomstring = require('randomstring');
+const fs = require('fs');
+const path = require('path');
 
 const UploadFile = (req, res) => {
     var file = req.files.file;
@@ -24,15 +26,34 @@ const UploadFile = (req, res) => {
         charset: 'alphanumeric'
     });
 
-    file.mv(`./uploads/${prefix}_${file.name}`, err => {
+    let name = file.name.replace(/ /g, '_');
+    let path = `./uploads/${req.user.id}`;
+    if(!fs.existsSync(path)){
+        fs.mkdirSync(path);
+    }
+
+    file.mv(`${path}/${prefix}_${name}`, err => {
         if(err){
             console.log(err);
             return res.status(500).send('Internal Server Error');
         }
-        return res.status(200).send('ok');
+        return res.status(200).send({
+            filename: `${prefix}_${name}`
+        });
     });
 }
 
+const DownloadFile = (req, res) => {
+    
+    let filepath = path.resolve(`${__dirname}/../uploads/${req.user.id}/${req.params.filename}`);
+    if(fs.existsSync(filepath)){
+        res.sendFile(filepath);
+    } else {
+        res.status(404).send('Not found');
+    }
+}
+
 module.exports = {
-    UploadFile
+    UploadFile,
+    DownloadFile
 }

@@ -7,6 +7,8 @@ var User = mongoose.model(
         last_name: String,
         email: String,
         password: String,
+        confirm_hash: String,
+        confirmed: Boolean
     })
 );
 

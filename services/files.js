@@ -17,6 +17,7 @@ api.use(fileupload({
 }));
 
 api.post('/api/v1/upload', files.UploadFile);
+api.get('/api/v1/upload/:filename', files.DownloadFile);
 
 api.listen(8002, err => {
     if(err){
