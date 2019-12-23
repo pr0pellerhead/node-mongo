@@ -35,7 +35,19 @@ const getUserPasswordByEmail = (email) => {
     });
 }
 
+const confirmUserAccount = (hash) => {
+    return new Promise((success, fail) => {
+        User.update({confirm_hash: hash}, {confirmed: true}, (err) => {
+            if(err){
+                return fail(err);
+            }
+            return success();
+        });
+    });
+}
+
 module.exports = {
     createUser,
-    getUserPasswordByEmail
+    getUserPasswordByEmail,
+    confirmUserAccount
 }
