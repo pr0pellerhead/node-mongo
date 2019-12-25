@@ -23,7 +23,7 @@ api.all('/api/v1/filmovi/*', (req, res) => {
 });
 
 api.all('/*', (req, res) => {
-    req.status(404).send('Not Found!');
+    res.status(404).send('Not Found!');
 });
 
 api.listen(process.env.PORT, err => {
