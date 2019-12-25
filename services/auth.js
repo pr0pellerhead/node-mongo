@@ -28,13 +28,13 @@ api.use(
     )
 );
 
-api.post('/api/v1/register', auth.register);
-api.get('/api/v1/confirm/:confirm_hash', auth.confirm);
-api.post('/api/v1/login', auth.login);
-api.get('/api/v1/renew', auth.renew);
-api.post('/api/v1/reset-link', auth.resetLink);
-api.post('/api/v1/reset-password', auth.resetPassword);
-api.post('/api/v1/change-password', auth.changePassword);
+api.post('/api/v1/auth/register', auth.register);
+api.get('/api/v1/auth/confirm/:confirm_hash', auth.confirm);
+api.post('/api/v1/auth/login', auth.login);
+api.get('/api/v1/auth/renew', auth.renew);
+api.post('/api/v1/auth/reset-link', auth.resetLink);
+api.post('/api/v1/auth/reset-password', auth.resetPassword);
+api.post('/api/v1/auth/change-password', auth.changePassword);
 
 api.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
