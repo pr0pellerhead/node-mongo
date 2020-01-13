@@ -12,37 +12,49 @@ const register = (req, res) => {
     v.check()
     .then(matched => {
         if(matched) {
-            bcrypt.genSalt(10, function(err, salt) {
-                if(err){
-                    throw new Error(err);
-                    return;
+            // get user by email
+            return mUsers.getUserPasswordByEmail(req.body.email)
+            .then((ed) => {
+                console.log(ed);
+                if(!ed) {
+                    bcrypt.genSalt(10, function(err, salt) {
+                        if(err){
+                            throw new Error(err);
+                            return;
+                        }
+                        bcrypt.hash(req.body.password, salt, function(err, hash) {
+                            if(err){
+                                throw new Error(err);
+                                return;
+                            }
+                            var confirm_hash = randomstring.generate({
+                                length: 30,
+                                charset: 'alphanumeric'
+                            });
+                            mUsers.createUser({
+                                ...req.body, 
+                                password: hash,
+                                confirm_hash: confirm_hash,
+                                confirmed: false
+                            });
+                            sgMail.setApiKey(config.getConfig('mailer').key);
+                            const msg = {
+                                to: req.body.email,
+                                from: 'bojang@gmail.com',
+                                subject: 'Thanks for registering',
+                                text: 'Thanks for registering',
+                                html: `<a href="http://localhost:8001/api/v1/confirm/${confirm_hash}">Click here to confirm your account</a>`,
+                            };
+                            sgMail.send(msg);
+                            return;
+                        });
+                    });
+                } else {
+                    throw new Error('Bad Request - User Exists');
                 }
-                bcrypt.hash(req.body.password, salt, function(err, hash) {
-                    if(err){
-                        throw new Error(err);
-                        return;
-                    }
-                    var confirm_hash = randomstring.generate({
-                        length: 30,
-                        charset: 'alphanumeric'
-                    });
-                    mUsers.createUser({
-                        ...req.body, 
-                        password: hash,
-                        confirm_hash: confirm_hash,
-                        confirmed: false
-                    });
-                    sgMail.setApiKey(config.getConfig('mailer').key);
-                    const msg = {
-                        to: req.body.email,
-                        from: 'bojang@gmail.com',
-                        subject: 'Thanks for registering',
-                        text: 'Thanks for registering',
-                        html: `<a href="http://localhost:8001/api/v1/confirm/${confirm_hash}">Click here to confirm your account</a>`,
-                    };
-                    sgMail.send(msg);
-                    return;
-                });
+            })
+            .catch(err => {
+                throw new Error(err);
             });
         } else {
             throw new Error('Validation failed');
